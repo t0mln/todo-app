@@ -1,7 +1,10 @@
 import express from "express";
+import cors from "cors";
 import { pool } from "./db.js";
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -10,7 +13,9 @@ app.get("/", (req, res) => {
 
 app.get("/api/todos", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM todos");
+    const result = await pool.query(
+  "SELECT * FROM todos ORDER BY id ASC"
+);
     res.json(result.rows);
   } catch (error) {
     console.error(error);
