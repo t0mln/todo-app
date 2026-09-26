@@ -1,0 +1,427 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  padding: 90px 24px;
+
+  font-family: "DM Sans", sans-serif;
+  color: #f5f5f7;
+
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(124, 58, 237, 0.35),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 100% 50%,
+      rgba(37, 99, 235, 0.18),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 0% 90%,
+      rgba(168, 85, 247, 0.15),
+      transparent 35%
+    ),
+    #07070a;
+}
+
+/* =========================
+   HEADING
+========================= */
+
+h1 {
+  max-width: 850px;
+  margin: 0 auto 55px;
+
+  text-align: center;
+
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.07em;
+
+  background: linear-gradient(
+    120deg,
+    #ffffff 10%,
+    #d8ccff 45%,
+    #8b5cf6 80%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* =========================
+   FORM
+========================= */
+
+#todo-form {
+  display: flex;
+  gap: 12px;
+
+  max-width: 800px;
+  margin: 0 auto 35px;
+  padding: 8px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35),
+    inset 0 1px rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(20px);
+}
+
+/* =========================
+   INPUT
+========================= */
+
+#todo-input {
+  flex: 1;
+  min-width: 0;
+
+  padding: 18px 20px;
+
+  border: none;
+  outline: none;
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 17px;
+}
+
+#todo-input::placeholder {
+  color: #858592;
+}
+
+#todo-input:focus {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* =========================
+   ADD BUTTON
+========================= */
+
+#todo-form button {
+  padding: 0 28px;
+
+  border: none;
+  border-radius: 13px;
+
+  background: linear-gradient(
+    135deg,
+    #8b5cf6,
+    #6366f1
+  );
+
+  color: white;
+
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 25px rgba(99, 102, 241, 0.3);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#todo-form button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 35px rgba(124, 92, 246, 0.45);
+}
+
+#todo-form button:active {
+  transform: translateY(0);
+}
+
+/* =========================
+   MESSAGES
+========================= */
+
+#loading-message,
+#error-message {
+  max-width: 800px;
+  margin: 0 auto 20px;
+
+  font-size: 14px;
+  color: #9999a5;
+}
+
+#error-message {
+  color: #ff7777;
+}
+
+/* =========================
+   TODO LIST
+========================= */
+
+#todo-list {
+  max-width: 800px;
+  margin: 0 auto;
+
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* =========================
+   TODO CARD
+========================= */
+
+#todo-list li {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  min-height: 82px;
+  padding: 18px 20px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.075),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.06);
+
+  backdrop-filter: blur(16px);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+#todo-list li:hover {
+  transform: translateY(-3px);
+
+  border-color: rgba(139, 92, 246, 0.35);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.12),
+      rgba(255, 255, 255, 0.035)
+    );
+}
+
+/* =========================
+   TODO CHECKBOX
+========================= */
+
+#todo-list input[type="checkbox"] {
+  appearance: none;
+
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  border: 2px solid #77748a;
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#todo-list input[type="checkbox"]:hover {
+  transform: scale(1.08);
+
+  border-color: #8b5cf6;
+
+  box-shadow:
+    0 0 18px rgba(139, 92, 246, 0.2);
+}
+
+#todo-list input[type="checkbox"]:checked {
+  border-color: transparent;
+
+  background:
+    linear-gradient(
+      135deg,
+      #a855f7,
+      #6366f1
+    );
+
+  box-shadow:
+    0 0 20px rgba(139, 92, 246, 0.35);
+}
+
+/* Check mark */
+
+#todo-list input[type="checkbox"]:checked::after {
+  content: "✓";
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  color: white;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* =========================
+   TODO TEXT
+========================= */
+
+#todo-list li span {
+  flex: 1;
+
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.4;
+
+  color: #f1f1f4;
+}
+
+/* Completed todo */
+
+#todo-list li input[type="checkbox"]:checked + span {
+  color: #777783;
+
+  text-decoration: line-through;
+  text-decoration-color: #8b5cf6;
+}
+
+/* =========================
+   DELETE BUTTON
+========================= */
+
+#todo-list li button {
+  margin-left: auto;
+
+  padding: 9px 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  color: #aaaab5;
+
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+#todo-list li button:hover {
+  border-color: rgba(239, 68, 68, 0.3);
+
+  background: rgba(239, 68, 68, 0.15);
+
+  color: #ff7777;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+  body {
+    padding: 55px 16px;
+  }
+
+  h1 {
+    margin-bottom: 40px;
+    font-size: 4rem;
+  }
+
+  #todo-form {
+    flex-direction: column;
+  }
+
+  #todo-input {
+    padding: 17px;
+  }
+
+  #todo-form button {
+    min-height: 52px;
+  }
+
+  #todo-list li {
+    min-height: 74px;
+    padding: 15px;
+  }
+
+  #todo-list input[type="checkbox"] {
+    width: 27px;
+    height: 27px;
+  }
+}
+#todo-list li:has(input[type="checkbox"]:checked) {
+  opacity: 0.55;
+  filter: blur(1.2px);
+  transform: scale(0.99);
+}
+
+#todo-list li:has(input[type="checkbox"]:checked):hover {
+  opacity: 0.7;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+#todo-list {
+  display: flex;
+  flex-direction: column;
+}
+
+#todo-list li {
+  order: 1;
+}
+
+#todo-list li:has(input[type="checkbox"]:checked) {
+  order: 2;
+}

@@ -28,6 +28,9 @@ async function handleCheckboxChange(todoId, checkbox) {
   if (!success) {
     checkbox.checked = !checkbox.checked;
   }
+  else if (checkbox.checked) {
+confetti({particleCount: 200});
+  }
 }
 
 async function deleteTodo(todoId) {

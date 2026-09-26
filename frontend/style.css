@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap");
 
 * {
   box-sizing: border-box;
@@ -7,6 +7,7 @@
 }
 
 html {
+  background: #f4f3ef;
   scroll-behavior: smooth;
 }
 
@@ -14,26 +15,12 @@ body {
   min-height: 100vh;
   padding: 90px 24px;
 
-  font-family: "DM Sans", sans-serif;
-  color: #f5f5f7;
+  background: #f4f3ef;
+  color: #111;
 
-  background:
-    radial-gradient(
-      circle at 50% -10%,
-      rgba(124, 58, 237, 0.35),
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 100% 50%,
-      rgba(37, 99, 235, 0.18),
-      transparent 35%
-    ),
-    radial-gradient(
-      circle at 0% 90%,
-      rgba(168, 85, 247, 0.15),
-      transparent 35%
-    ),
-    #07070a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.5;
 }
 
 /* =========================
@@ -41,27 +28,18 @@ body {
 ========================= */
 
 h1 {
-  max-width: 850px;
+  max-width: 600px;
   margin: 0 auto 55px;
 
   text-align: center;
 
-  font-family: "Space Grotesk", sans-serif;
-  font-size: clamp(3.5rem, 9vw, 7rem);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.07em;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.045em;
 
-  background: linear-gradient(
-    120deg,
-    #ffffff 10%,
-    #d8ccff 45%,
-    #8b5cf6 80%
-  );
-
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #111;
 }
 
 /* =========================
@@ -70,22 +48,12 @@ h1 {
 
 #todo-form {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 
-  max-width: 800px;
-  margin: 0 auto 35px;
-  padding: 8px;
+  max-width: 600px;
+  margin: 0 auto 45px;
 
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 18px;
-
-  background: rgba(255, 255, 255, 0.055);
-
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.35),
-    inset 0 1px rgba(255, 255, 255, 0.08);
-
-  backdrop-filter: blur(20px);
+  text-align: left;
 }
 
 /* =========================
@@ -96,26 +64,27 @@ h1 {
   flex: 1;
   min-width: 0;
 
-  padding: 18px 20px;
+  padding: 12px 0;
 
-  border: none;
+  border: 0;
+  border-bottom: 1px solid #111;
+  border-radius: 0;
+
   outline: none;
-  border-radius: 12px;
 
   background: transparent;
-
-  color: #ffffff;
+  color: #111;
 
   font-family: inherit;
   font-size: 17px;
 }
 
 #todo-input::placeholder {
-  color: #858592;
+  color: #777;
 }
 
 #todo-input:focus {
-  background: rgba(255, 255, 255, 0.035);
+  border-bottom-width: 2px;
 }
 
 /* =========================
@@ -123,42 +92,32 @@ h1 {
 ========================= */
 
 #todo-form button {
-  padding: 0 28px;
+  padding: 8px 14px;
 
-  border: none;
-  border-radius: 13px;
+  border: 1px solid #111;
+  border-radius: 0;
 
-  background: linear-gradient(
-    135deg,
-    #8b5cf6,
-    #6366f1
-  );
+  background: transparent;
+  color: #111;
 
-  color: white;
-
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 15px;
-  font-weight: 600;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
 
   cursor: pointer;
 
-  box-shadow:
-    0 8px 25px rgba(99, 102, 241, 0.3);
-
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 #todo-form button:hover {
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 12px 35px rgba(124, 92, 246, 0.45);
+  background: #111;
+  color: #f4f3ef;
 }
 
 #todo-form button:active {
-  transform: translateY(0);
+  transform: translateY(1px);
 }
 
 /* =========================
@@ -167,15 +126,21 @@ h1 {
 
 #loading-message,
 #error-message {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto 20px;
 
-  font-size: 14px;
-  color: #9999a5;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+
+  text-align: left;
+}
+
+#loading-message {
+  color: #777;
 }
 
 #error-message {
-  color: #ff7777;
+  color: #111;
 }
 
 /* =========================
@@ -183,110 +148,77 @@ h1 {
 ========================= */
 
 #todo-list {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
+
+  padding: 0;
 
   list-style: none;
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
 }
 
 /* =========================
-   TODO CARD
+   TODO ITEM
 ========================= */
 
 #todo-list li {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 13px;
 
-  min-height: 82px;
-  padding: 18px 20px;
+  min-height: 58px;
 
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 18px;
+  padding: 12px 0;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.075),
-      rgba(255, 255, 255, 0.025)
-    );
+  border-bottom: 1px solid #bbb;
 
-  box-shadow:
-    0 15px 40px rgba(0, 0, 0, 0.25),
-    inset 0 1px rgba(255, 255, 255, 0.06);
-
-  backdrop-filter: blur(16px);
+  background: transparent;
 
   transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease;
+    opacity 0.2s ease,
+    filter 0.2s ease,
+    transform 0.2s ease;
 }
 
-#todo-list li:hover {
-  transform: translateY(-3px);
+/* First item gets top border */
 
-  border-color: rgba(139, 92, 246, 0.35);
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(139, 92, 246, 0.12),
-      rgba(255, 255, 255, 0.035)
-    );
+#todo-list li:first-child {
+  border-top: none;
 }
 
 /* =========================
-   TODO CHECKBOX
+   CHECKBOX
 ========================= */
 
 #todo-list input[type="checkbox"] {
   appearance: none;
 
-  width: 30px;
-  height: 30px;
+  width: 15px;
+  height: 15px;
 
   flex-shrink: 0;
+  margin: 0;
 
-  border: 2px solid #77748a;
-  border-radius: 9px;
+  border: 1px solid #111;
+  border-radius: 0;
 
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
 
   cursor: pointer;
 
   transition:
-    transform 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
+    background 0.15s ease,
+    transform 0.15s ease;
 }
 
 #todo-list input[type="checkbox"]:hover {
   transform: scale(1.08);
-
-  border-color: #8b5cf6;
-
-  box-shadow:
-    0 0 18px rgba(139, 92, 246, 0.2);
 }
 
 #todo-list input[type="checkbox"]:checked {
-  border-color: transparent;
-
-  background:
-    linear-gradient(
-      135deg,
-      #a855f7,
-      #6366f1
-    );
-
-  box-shadow:
-    0 0 20px rgba(139, 92, 246, 0.35);
+  background: #111;
 }
 
 /* Check mark */
@@ -301,10 +233,10 @@ h1 {
   width: 100%;
   height: 100%;
 
-  color: white;
+  color: #f4f3ef;
 
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 11px;
+  line-height: 1;
 }
 
 /* =========================
@@ -314,20 +246,20 @@ h1 {
 #todo-list li span {
   flex: 1;
 
-  font-size: 17px;
-  font-weight: 500;
-  line-height: 1.4;
+  color: #111;
 
-  color: #f1f1f4;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 /* Completed todo */
 
 #todo-list li input[type="checkbox"]:checked + span {
-  color: #777783;
+  color: #777;
 
   text-decoration: line-through;
-  text-decoration-color: #8b5cf6;
+  text-decoration-thickness: 1px;
 }
 
 /* =========================
@@ -337,32 +269,55 @@ h1 {
 #todo-list li button {
   margin-left: auto;
 
-  padding: 9px 13px;
+  padding: 3px 0;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9px;
+  border: 0;
+  border-radius: 0;
 
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
+  color: #777;
 
-  color: #aaaab5;
-
-  font-family: inherit;
-  font-size: 13px;
+  font-family: "DM Mono", monospace;
+  font-size: 10px;
 
   cursor: pointer;
 
   transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
+    color 0.15s ease,
+    opacity 0.15s ease;
 }
 
 #todo-list li button:hover {
-  border-color: rgba(239, 68, 68, 0.3);
+  color: #111;
+  text-decoration: underline;
+}
 
-  background: rgba(239, 68, 68, 0.15);
+/* =========================
+   COMPLETED TASKS
+========================= */
 
-  color: #ff7777;
+/*
+   Keep your existing behavior:
+   completed tasks move below
+   unfinished tasks.
+*/
+
+#todo-list li {
+  order: 1;
+}
+
+#todo-list li:has(input[type="checkbox"]:checked) {
+  order: 2;
+
+  opacity: 0.55;
+  filter: blur(0.5px);
+  transform: scale(0.99);
+}
+
+#todo-list li:has(input[type="checkbox"]:checked):hover {
+  opacity: 0.75;
+  filter: blur(0);
+  transform: scale(1);
 }
 
 /* =========================
@@ -376,52 +331,26 @@ h1 {
 
   h1 {
     margin-bottom: 40px;
-    font-size: 4rem;
+    font-size: 4.5rem;
   }
 
   #todo-form {
-    flex-direction: column;
+    gap: 7px;
   }
 
   #todo-input {
-    padding: 17px;
+    padding: 12px 0;
   }
 
   #todo-form button {
-    min-height: 52px;
+    padding: 8px 12px;
   }
 
   #todo-list li {
-    min-height: 74px;
-    padding: 15px;
+    min-height: 55px;
   }
 
-  #todo-list input[type="checkbox"] {
-    width: 27px;
-    height: 27px;
+  #todo-list li span {
+    font-size: 17px;
   }
-}
-#todo-list li:has(input[type="checkbox"]:checked) {
-  opacity: 0.55;
-  filter: blur(1.2px);
-  transform: scale(0.99);
-}
-
-#todo-list li:has(input[type="checkbox"]:checked):hover {
-  opacity: 0.7;
-  filter: blur(0);
-  transform: scale(1);
-}
-
-#todo-list {
-  display: flex;
-  flex-direction: column;
-}
-
-#todo-list li {
-  order: 1;
-}
-
-#todo-list li:has(input[type="checkbox"]:checked) {
-  order: 2;
 }
