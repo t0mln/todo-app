@@ -1,6 +1,7 @@
+const API_URL = "https://todo-app-backend-neon.vercel.app";
 async function updateTodo(todoId, completed) {
   try {
-    const response = await fetch(`http://localhost:3000/api/todos/${todoId}`, {
+    const response = await fetch(`${API_URL}/api/todos/${todoId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
@@ -36,7 +37,7 @@ confetti({particleCount: 200});
 async function deleteTodo(todoId) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/todos/${todoId}`,
+      `${API_URL}/api/todos/${todoId}`,
       {
         method: "DELETE"
       }
@@ -56,7 +57,7 @@ async function deleteTodo(todoId) {
 
 async function loadTodos() {
   try {
-    const response = await fetch("http://localhost:3000/api/todos");
+    const response = await fetch(`${API_URL}/api/todos`);
 
     if (!response.ok) {
       throw new Error("Failed to load todos");
@@ -125,7 +126,7 @@ todoForm.addEventListener("submit", async (event) => {
   const title = input.value;
 
   try {
-    const response = await fetch("http://localhost:3000/api/todos", {
+    const response = await fetch(`${API_URL}/api/todos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
