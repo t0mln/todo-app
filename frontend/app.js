@@ -1,5 +1,9 @@
-
 const API_URL = "https://todo-app-backend-neon.vercel.app";
+
+
+// ==============================
+// UPDATE TODO
+// ==============================
 
 async function updateTodo(todoId, completed) {
   try {
@@ -13,11 +17,7 @@ async function updateTodo(todoId, completed) {
       })
     });
 
-    if (!response.ok) {
-      return false;
-    }
-
-    return true;
+    return response.ok;
 
   } catch (error) {
     console.error("Could not connect to server", error);
@@ -25,22 +25,33 @@ async function updateTodo(todoId, completed) {
   }
 }
 
+
+// ==============================
+// HANDLE CHECKBOX
+// ==============================
+
 async function handleCheckboxChange(todoId, checkbox) {
   const newCompletedState = checkbox.checked;
 
-  // UI already changed immediately.
-  // Send the update to the server in the background.
+  // UI has already changed.
+  // Give the user immediate feedback.
   if (newCompletedState) {
     confetti({ particleCount: 200 });
   }
 
+  // API happens in the background.
   const success = await updateTodo(todoId, newCompletedState);
 
-  // If the server update failed, undo the UI change.
+  // If API failed, undo the UI change.
   if (!success) {
     checkbox.checked = !newCompletedState;
   }
 }
+
+
+// ==============================
+// DELETE TODO
+// ==============================
 
 async function deleteTodo(todoId) {
   try {
@@ -51,16 +62,80 @@ async function deleteTodo(todoId) {
       }
     );
 
-    if (!response.ok) {
-      return false;
-    }
+    return response.ok;
 
-    return true;
   } catch (error) {
     console.error("Could not connect to server", error);
     return false;
   }
 }
+
+
+// ==============================
+// CREATE TODO ELEMENT
+// ==============================
+
+function createTodoElement(todo) {
+  const li = document.createElement("li");
+
+  li.dataset.id = todo.id;
+
+  const checkbox = document.createElement("input");
+
+  checkbox.type = "checkbox";
+  checkbox.checked = todo.completed;
+
+  checkbox.addEventListener("change", () => {
+    handleCheckboxChange(li.dataset.id, checkbox);
+  });
+
+  li.appendChild(checkbox);
+
+
+  const titleText = document.createTextNode(todo.title);
+
+  li.appendChild(titleText);
+
+
+  const deleteButton = document.createElement("button");
+
+  deleteButton.textContent = "Delete";
+  deleteButton.classList.add("delete-button");
+
+
+  deleteButton.addEventListener("click", async () => {
+
+    // Remember where the task was before removing it.
+    const parent = li.parentElement;
+    const nextSibling = li.nextSibling;
+
+    // UI changes immediately.
+    li.remove();
+
+    // API happens in the background.
+    const success = await deleteTodo(li.dataset.id);
+
+    // If deletion failed, restore the task.
+    if (!success) {
+
+      if (nextSibling && nextSibling.parentElement === parent) {
+        parent.insertBefore(li, nextSibling);
+      } else {
+        parent.appendChild(li);
+      }
+    }
+  });
+
+
+  li.appendChild(deleteButton);
+
+  return li;
+}
+
+
+// ==============================
+// LOAD TODOS
+// ==============================
 
 async function loadTodos() {
   try {
@@ -75,44 +150,13 @@ async function loadTodos() {
     const todoList = document.querySelector("#todo-list");
 
     for (const todo of todos) {
-      const li = document.createElement("li");
-
-      li.dataset.id = todo.id;
-
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.checked = todo.completed;
-
-      checkbox.addEventListener("change", () => {
-        handleCheckboxChange(todo.id, checkbox);
-      });
-
-      li.appendChild(checkbox);
-
-      const title = document.createTextNode(todo.title);
-      li.appendChild(title);
-
-      const deleteButton = document.createElement("button");
-
-      deleteButton.textContent = "Delete";
-      deleteButton.classList.add("delete-button");
-
-      deleteButton.addEventListener("click", async () => {
-        const success = await deleteTodo(todo.id);
-
-        if (!success) {
-          return;
-        }
-
-        li.remove();
-      });
-
-      li.appendChild(deleteButton);
+      const li = createTodoElement(todo);
 
       todoList.appendChild(li);
     }
 
     document.querySelector("#loading-message").remove();
+
   } catch (error) {
     console.error(error);
 
@@ -121,7 +165,17 @@ async function loadTodos() {
   }
 }
 
+
+// ==============================
+// LOAD EXISTING TODOS
+// ==============================
+
 loadTodos();
+
+
+// ==============================
+// ADD TODO
+// ==============================
 
 const input = document.querySelector("#todo-input");
 const todoForm = document.querySelector("#todo-form");
@@ -129,73 +183,89 @@ const todoForm = document.querySelector("#todo-form");
 todoForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const title = input.value;
+  const title = input.value.trim();
+
+  if (title === "") {
+    return;
+  }
+
+
+  // Create a temporary ID for the UI.
+  const temporaryId = `temporary-${Date.now()}`;
+
+
+  // Create the todo immediately in the UI.
+  const temporaryTodo = {
+    id: temporaryId,
+    title: title,
+    completed: false
+  };
+
+
+  const todoList = document.querySelector("#todo-list");
+
+  const li = createTodoElement(temporaryTodo);
+
+  todoList.appendChild(li);
+
+
+  // Clear input immediately.
+  input.value = "";
+
+  document.querySelector("#error-message").textContent = "";
+
 
   try {
+
+    // Send the request in the background.
     const response = await fetch(`${API_URL}/api/todos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ title })
+      body: JSON.stringify({
+        title: title
+      })
     });
 
+
+    // API failed.
     if (!response.ok) {
+
+      li.remove();
+
       const error = await response.json();
 
-      const errorMessage = document.querySelector("#error-message");
-      errorMessage.textContent = error.error;
+      document.querySelector("#error-message").textContent =
+        error.error || "Failed to create todo.";
 
       return;
     }
 
+
+    // API succeeded.
     const todo = await response.json();
 
-    document.querySelector("#error-message").textContent = "";
-    input.value = "";
 
-    const li = document.createElement("li");
+    // Replace temporary ID with the real database ID.
     li.dataset.id = todo.id;
 
-    const titleText = document.createTextNode(todo.title);
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = todo.completed;
-
-    checkbox.addEventListener("change", () => {
-      handleCheckboxChange(todo.id, checkbox);
-    });
-
-    li.appendChild(checkbox);
-
-    li.appendChild(titleText);
-
-    const deleteButton = document.createElement("button");
-
-    deleteButton.textContent = "Delete";
-    deleteButton.classList.add("delete-button");
-
-    deleteButton.addEventListener("click", async () => {
-      const success = await deleteTodo(todo.id);
-
-      if (!success) {
-        return;
-      }
-
-      li.remove();
-    });
-
-    li.appendChild(deleteButton);
-
-    document.querySelector("#todo-list").appendChild(li);
   } catch (error) {
+
     console.error(error);
 
-    const errorMessage = document.querySelector("#error-message");
-    errorMessage.textContent = "Could not connect to the server.";
+    // API/network failed.
+    li.remove();
+
+    document.querySelector("#error-message").textContent =
+      "Could not connect to the server.";
   }
 });
+
+
+// ==============================
+// CLEAR ERROR MESSAGE
+// ==============================
 
 input.addEventListener("input", () => {
   document.querySelector("#error-message").textContent = "";
